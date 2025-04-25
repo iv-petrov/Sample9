@@ -1,76 +1,70 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using Sample9.Domain;
 using Sample9.DataModels;
+using MediatR;
+using Sample9.DataAccess;
+using Sample9.Slices.Queries;
+using Sample9.Slices.Commands;
+using System.Threading.Tasks;
 
 namespace Sample9.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-        private readonly ICompanyService _companyService;
+        private readonly IMediator _mediator;
+        private readonly ApplicationDbContext _context;
 
-        public HomeController(ILogger<HomeController> logger, ICompanyService service)
+        public HomeController(IMediator mediator, ApplicationDbContext context)
         { 
-            _logger = logger;
-            _companyService = service;
+            _mediator = mediator;
+            _context = context;
         }
+        [HttpGet(Name = "index")]
+        public async Task<IActionResult> Index(CompaniesListQuery.Query query)
+            => View(await _mediator.Send(query));
 
-        public IActionResult Index()
-        {
-            return View(_companyService.GetAll());
-        }
-
-        [HttpGet("Append", Name = "AppendCompany")]
-        public IActionResult AppendCompany()
+        [HttpGet("Create", Name = "CreateCompany")]
+        public IActionResult CreateCompany()
         {
             Company company = new ();
-            return View("Append", company);
+            return View("Create", company);
         }
 
         [HttpGet("Update/{id}", Name = "UpdateCompany")]
-        public IActionResult UpdateCompany(int id)
+        public async Task<IActionResult> UpdateCompany(int id)
         {
-            Company company = _companyService.GetById(id);
+            Company company = await _mediator.Send(new GetCompanyQuery(id));
             return View("Update", company);
         }
 
         [HttpPost()]
-        public IActionResult Save(Company company)
+        public async Task<IActionResult> SaveCreate(Company company)
         {
-            if (String.IsNullOrEmpty(company.Name))
+            if (ModelState.ErrorCount != 0)
             {
-                ModelState.ClearValidationState("Name");
-                ModelState.AddModelError("Name", "Поле наименование должно быть заполнено");
-                if (company.Id == null)
-                    return View("Append", company);
-                else
-                    return View("Update", company);
+                return View("Create", company);
             }
-            if (String.IsNullOrEmpty(company.Inn))
+            await _mediator.Send(new CreateCompanyCommand(company.Name, company.Inn, company.Email));
+
+            return RedirectToAction("");
+        }
+
+        [HttpPost()]
+        public async Task<IActionResult> SaveUpdate(Company company)
+        {
+            if (ModelState.ErrorCount != 0)
             {
-                ModelState.ClearValidationState("Inn");
-                ModelState.AddModelError("Inn", "Поле ИНН обязательное");
-                if (company.Id == null)
-                    return View("Append", company);
-                else
-                    return View("Update", company);
+                return View("Update", company);
             }
-            if (company.Id == null)
-            {
-                _companyService.AppendCompany(company);
-            }
-            else
-            {
-                _companyService.UpdateCompany(company);
-            }
+            await _mediator.Send(new UpdateCompanyCommand(company.Id, company.Name, company.Inn, company.Email));
+
             return RedirectToAction("");
         }
 
         [HttpGet("Delete/{id}", Name = "Delete")]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            _companyService.DeleteCompany(id);
+            await _mediator.Send(new DeleteCompanyCommand(id));
             return RedirectToAction("");
         }
 

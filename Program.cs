@@ -1,5 +1,7 @@
+using Microsoft.EntityFrameworkCore;
 using Sample9.Controllers;
-using Sample9.Domain;
+using Sample9.DataAccess;
+using System.Reflection;
 
 namespace Sample9
 {
@@ -9,9 +11,10 @@ namespace Sample9
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseInMemoryDatabase("MyDataBase"));
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-            builder.Services.AddSingleton<ICompanyService,CompanyService>();
+            builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 
             var app = builder.Build();
 

@@ -4,8 +4,10 @@ namespace Sample9.DataModels
 {
     public class Company 
     {
-        public int? Id { get; set; }
+        public int Id { get; set; }
+        [Required(ErrorMessage = "Не указано Наименование")]
         public string Name { get; set; }
+        [Required(ErrorMessage = "Не указан ИНН компании")]
         public string Inn { get; set; }
         public string? Email { get; set; }
 
