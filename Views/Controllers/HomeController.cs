@@ -1,13 +1,12 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using Sample9.DataModels;
 using MediatR;
 using Sample9.DataAccess;
 using Sample9.Slices.Queries;
 using Sample9.Slices.Commands;
 using System.Threading.Tasks;
 
-namespace Sample9.Controllers
+namespace Sample9.Views.Controllers
 {
     public class HomeController : Controller
     {
@@ -44,7 +43,7 @@ namespace Sample9.Controllers
             {
                 return View("Create", company);
             }
-            await _mediator.Send(new CreateCompanyCommand(company.Name, company.Inn, company.Email));
+            await _mediator.Send(new CreateCompanyCommand(company));
 
             return RedirectToAction("");
         }
@@ -56,7 +55,7 @@ namespace Sample9.Controllers
             {
                 return View("Update", company);
             }
-            await _mediator.Send(new UpdateCompanyCommand(company.Id, company.Name, company.Inn, company.Email));
+            await _mediator.Send(new UpdateCompanyCommand(company));
 
             return RedirectToAction("");
         }

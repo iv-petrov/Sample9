@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using Sample9.Controllers;
+using Sample9.Views.Controllers;
 using Sample9.DataAccess;
 using System.Reflection;
 

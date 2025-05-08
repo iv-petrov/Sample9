@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Sample9.DataModels
+namespace Sample9.DataAccess
 {
     public class Company 
     {
@@ -13,6 +13,7 @@ namespace Sample9.DataModels
 
         public Company() 
         { 
+            Id = 0;
         }
         public Company(int id, string name, string inn, string email)
         {

@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Sample9.DataAccess;
-using Sample9.DataModels;
 
 namespace Sample9.Slices.Queries
 {

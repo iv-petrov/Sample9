@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Sample9.DataModels;
 using System.Data;
 
 namespace Sample9.DataAccess
