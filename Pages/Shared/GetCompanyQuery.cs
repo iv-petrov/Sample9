@@ -1,8 +1,9 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Sample9.DataAccess;
+using Sample9.Persistence;
+using Sample9.Domain;
 
-namespace Sample9.Slices.Queries
+namespace Sample9.Pages.Shared
 {
     public record GetCompanyQuery(int Id) : IRequest<Company>;
 

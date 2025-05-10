@@ -1,12 +1,15 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using System.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using Sample9.Domain;
 
-namespace Sample9.DataAccess
+namespace Sample9.Persistence
 {
     public class ApplicationDbContext : DbContext
     {
         public DbSet<Company> Companies { get; set; }
+        public async Task<int> NextCompanyId()
+        {
+            return (await Companies.MaxAsync(x => x.Id) + 1);
+        }
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
             Database.EnsureCreated();

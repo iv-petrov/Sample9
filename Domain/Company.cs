@@ -1,9 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Sample9.DataAccess
+namespace Sample9.Domain
 {
     public class Company 
     {
+        [Key]
         public int Id { get; set; }
         [Required(ErrorMessage = "Не указано Наименование")]
         public string Name { get; set; }

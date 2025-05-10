@@ -1,0 +1,29 @@
+﻿@page
+@model Sample9.Pages.DeleteModel
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Удаление компании</title>
+</head>
+<body>
+
+<h3>Подтвердите удаление компании?</h3>
+<div>
+    <p>
+        @Html.DisplayFor(model => model.Company.Name)
+    </p>
+    <form method="post">
+        <input type="hidden" asp-for="Company.Id" />
+        <input type="submit" value="Удалить" class="btn btn-danger" /> |
+        <a asp-page="./Index">К списку компаний</a>
+    </form>
+</div>
+</body>
+</html>

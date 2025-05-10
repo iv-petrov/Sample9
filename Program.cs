@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using Sample9.Views.Controllers;
-using Sample9.DataAccess;
+using Sample9.Persistence;
 using System.Reflection;
 
 namespace Sample9
@@ -13,7 +12,7 @@ namespace Sample9
 
             builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseInMemoryDatabase("MyDataBase"));
             // Add services to the container.
-            builder.Services.AddControllersWithViews();
+            builder.Services.AddRazorPages();
             builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 
             var app = builder.Build();
@@ -27,15 +26,14 @@ namespace Sample9
             }
 
             app.UseHttpsRedirection();
+
             app.UseStaticFiles();
 
             app.UseRouting();
 
             app.UseAuthorization();
 
-            app.MapControllerRoute(
-                name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+            app.MapRazorPages();
 
             app.Run();
         }
